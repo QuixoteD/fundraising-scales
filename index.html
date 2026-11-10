@@ -33,6 +33,8 @@
     3. No card, bank or wallet fields and no security statement are shown, because this file processes no payments. Both belong to the payment processor.
     4. State is a free-text Region box and no country is preselected, so that donors outside the United States are not blocked.
     5. The matching-gift search and the list of Corus organisations are not on the live page and have been removed.
+  10 November 2026: the allocation section opens with one optional question (direct the gift to one area, 50/50 or 100/0 against
+    Give where most needed); the full sliders sit behind Customise further.
   Differences found in the live source: the telephone number is shown as 866.597.1125 but the link dials +8005971125; this file dials +18665971125.
   Not verifiable from the supplied material: spacing and sizes (one screenshot, device scale unknown); heading style of steps 2 and 3; input, hover, focus
     and error styles; photograph rotation (the source lists three photographs; one is used).
@@ -98,6 +100,26 @@ a{color:var(--blue);text-decoration:underline}
 .pane h2,.alloc-sec h2{font:700 clamp(1.875rem,8vw,2.5rem)/1 var(--display);font-synthesis:none;color:var(--green);text-transform:uppercase;margin-top:24px}
 .pane h2.again{margin-top:32px}
 .alloc-sec h3.sub{font:700 22px/28px var(--font);margin-top:32px}
+.ask{border:0;padding:0;margin:0;min-width:0}
+.alloc-sec>.ask{margin-top:20px}
+.ask legend{font:700 20px/26px var(--font);padding:0;margin-bottom:10px;color:#000}
+.opt-tag{display:inline-block;margin-left:6px;padding:2px 8px;border:1px solid #000;border-radius:999px;font:700 12px/16px var(--font);vertical-align:3px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:12px;min-height:48px;padding:12px 14px;background:#fff;border:1px solid var(--field-line);color:#000;cursor:pointer;font:400 16px/22px var(--font)}
+.opt:hover{border-color:#000}
+.opt input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--blue)}
+.opt strong{display:block}
+.opt-sub{display:block}
+.opt:has(input:checked){border:2px solid var(--blue);padding:11px 13px;background:#EEF4FC}
+.opt .sw{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:8px;vertical-align:0}
+.ask-note{margin-top:10px;font-weight:700}
+.more{margin-top:20px}
+.more>summary{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;color:var(--navy-text);font:700 16px/22px var(--font);text-decoration:underline;text-underline-offset:3px;list-style:none}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary::after{content:"";width:12px;height:8px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M0 0h12L6 8z' fill='%2300274D'/%3E%3C/svg%3E") center/12px 8px no-repeat}
+.more[open]>summary::after{transform:rotate(180deg)}
+.more-in>*+*{margin-top:16px}
+.more-in{margin-top:8px}
 .pane h1:focus,.pane h2:focus,.alloc-sec h2:focus{outline:none}
 .note{font:400 18px/1.5 var(--script);color:var(--orange);text-align:center}
 
@@ -357,12 +379,29 @@ footer .logo{margin-bottom:24px}
       <section class="alloc-sec" id="allocation" aria-labelledby="allocH">
         <h2 id="allocH">Where your gift goes</h2>
         <p>Most donors leave this section as it is. A gift given where most needed, in line with Corus' impact priorities and opportunities, lets Corus respond to emergencies as they happen.</p>
-        <p>If you would rather direct your gift, divide it below. Move a slider or use the plus and minus buttons; the other shares adjust so that the total stays at 100%. Open an area to divide its share between its funds, and open a fund to divide its share between its programmes.</p>
-        <div style="display:grid;gap:8px">
-          <button type="button" class="btn sm" data-act="top-corus" aria-pressed="true">Give where most needed</button>
-          <button type="button" class="btn sm" data-act="top-equal" aria-pressed="false">Split equally between the five options</button>
-        </div>
-        <div id="tops"></div>
+        <fieldset class="ask" id="askDir">
+          <legend>Would you like to direct your gift? <span class="opt-tag">Optional</span></legend>
+          <div class="opts" id="dirOpts"></div>
+          <p class="ask-note" id="askCustom" hidden>Your gift is customised below. Choose an option above to replace it.</p>
+        </fieldset>
+        <fieldset class="ask" id="askSplit" hidden>
+          <legend id="splitLegend">How much should go to this area?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="split" value="50" checked><span><strong>Half and half</strong><span class="opt-sub" id="split50"></span></span></label>
+            <label class="opt"><input type="radio" name="split" value="100"><span><strong>All of it</strong><span class="opt-sub" id="split100"></span></span></label>
+          </div>
+        </fieldset>
+        <details class="more" id="customise">
+          <summary>Customise further</summary>
+          <div class="more-in">
+            <p>Divide your gift between all five options. Move a slider or use the plus and minus buttons; the other shares adjust so that the total stays at 100%. Open an area to divide its share between its funds, and open a fund to divide its share between its programmes.</p>
+            <div style="display:grid;gap:8px">
+              <button type="button" class="btn sm" data-act="top-corus" aria-pressed="true">Give where most needed</button>
+              <button type="button" class="btn sm" data-act="top-equal" aria-pressed="false">Split equally between the five options</button>
+            </div>
+            <div id="tops"></div>
+          </div>
+        </details>
         <h3 class="sub">Your gift</h3>
         <p class="total-line"><strong id="totalText">$0.00</strong> <span id="freqText"></span></p>
         <div class="bar" id="bar" role="img" aria-label=""></div>
@@ -772,6 +811,52 @@ footer .logo{margin-bottom:24px}
       (t.subs ? foldBlock(t) : '') + '</div>';
   }).join('');
 
+  /* ---------- simple question (10 Nov 2026) ---------- */
+  var CHOOSABLE = TOPS.filter(function (t) { return t.id !== 'corus'; });
+  document.getElementById('dirOpts').innerHTML =
+    '<label class="opt"><input type="radio" name="dir" value="none" checked><span><strong>No, give where most needed</strong>' +
+    '<span class="opt-sub">Corus directs all of it to where it is needed most.</span></span></label>' +
+    CHOOSABLE.map(function (t) {
+      return '<label class="opt"><input type="radio" name="dir" value="' + t.id + '"><span><strong>' +
+        '<span class="sw" style="background:' + t.color + '" aria-hidden="true"></span>' + esc(t.name) + '</strong></span></label>';
+    }).join('');
+  function simpleOf(top) {
+    var on = CHOOSABLE.filter(function (t) { return top[t.id] > 0; });
+    if (on.length === 0 && top.corus === 100) return { dir: 'none' };
+    if (on.length !== 1) return null;
+    var a = on[0].id;
+    if (top[a] === 100) return { dir: a, split: '100' };
+    if (top[a] === 50 && top.corus === 50) return { dir: a, split: '50' };
+    return null;
+  }
+  function applySimple() {
+    var d = form.querySelector('input[name="dir"]:checked');
+    var sp = form.querySelector('input[name="split"]:checked');
+    var o = defaultTop();
+    if (d && d.value !== 'none') {
+      var n = (sp && sp.value === '100') ? 100 : 50;
+      o.corus = 100 - n; o[d.value] = n;
+    }
+    state.top = o;
+  }
+  function syncSimple(cents) {
+    var sm = simpleOf(state.top);
+    var dirs = form.querySelectorAll('input[name="dir"]');
+    for (var i = 0; i < dirs.length; i++) { dirs[i].checked = !!sm && dirs[i].value === sm.dir; }
+    document.getElementById('askCustom').hidden = !!sm;
+    var showSplit = !!sm && sm.dir !== 'none';
+    document.getElementById('askSplit').hidden = !showSplit;
+    if (!showSplit) return;
+    var t = TOPS.filter(function (x) { return x.id === sm.dir; })[0];
+    var nm = t.short || t.name;
+    var splits = form.querySelectorAll('input[name="split"]');
+    for (var k = 0; k < splits.length; k++) { splits[k].checked = splits[k].value === sm.split; }
+    var half = allocCents(cents, { a: 50, b: 50 }, ['a', 'b']);
+    document.getElementById('splitLegend').textContent = 'How much should go to ' + nm + '?';
+    document.getElementById('split50').textContent = money(half[0]) + ' to ' + nm + ' and ' + money(half[1]) + ' where most needed';
+    document.getElementById('split100').textContent = money(cents) + ' to ' + nm;
+  }
+
   /* ---------- state changes ---------- */
   function setTop(id, v) { state.top = rebalance(state.top, TOP_IDS, id, v); }
   function setSub(areaId, id, v) {
@@ -815,6 +900,15 @@ footer .logo{margin-bottom:24px}
     }
     else { return; }
     update();
+  });
+  form.addEventListener('change', function (e) {
+    var n = e.target.name;
+    if (n === 'dir') {
+      /* coming from no choice or from a customised split, start at half and half */
+      var prev = simpleOf(state.top);
+      if (!prev || prev.dir === 'none') { form.querySelector('input[name="split"][value="50"]').checked = true; }
+    }
+    if (n === 'dir' || n === 'split') { applySimple(); update(); }
   });
   form.addEventListener('input', function (e) {
     var t = e.target, v;
@@ -913,6 +1007,7 @@ footer .logo{margin-bottom:24px}
       });
     });
 
+    syncSimple(cents);
     document.getElementById('totalText').textContent = money(cents);
     document.getElementById('totalCell').textContent = money(cents);
     document.getElementById('freqText').textContent = state.freq === 'monthly' ? 'every month' : 'as a one-off gift';

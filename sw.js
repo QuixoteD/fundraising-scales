@@ -1,6 +1,6 @@
-/* Service worker for the DRAFT Corus giving page (v1-20261110).
+/* Service worker for the DRAFT Corus giving page (v2-20261110).
    Same-origin files: cache first, refreshed in the background. Fonts and CDN images: cached after first use. */
-const CACHE = 'corus-give-draft-v1-20261110';
+const CACHE = 'corus-give-draft-v2-20261110';
 const PRECACHE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png']; // PRECACHE
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(PRECACHE); }).then(function () { return self.skipWaiting(); }));
